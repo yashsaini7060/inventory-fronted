@@ -19,12 +19,13 @@ export default [
     },
     settings: { react: { version: '18.3' } },
     plugins: {
-      'simple-import-sort':simpleImportSort,
+      'simple-import-sort': simpleImportSort,
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
     rules: {
+      "react/prop-types": "off",
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
       'semi': ['error', 'always'],

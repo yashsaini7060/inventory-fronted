@@ -1,19 +1,22 @@
-import './App.css';
+import "./App.css";
 
-import { useEffect } from 'react';
-import toast from 'react-hot-toast';
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+import { Route, Routes } from "react-router-dom";
 
-import { Button } from './components/ui/button';
-
+import HomeLayout from "./layouts/HomeLayout";
+import Auth from "./pages/Auth";
+import NotFound from "./pages/NotFound";
 function App() {
-useEffect(() => {
-  toast.success('Hello');
-}, []);
+  useEffect(() => {
+    toast.success("Hello");
+  }, []);
   return (
-    <>
-      <h1 className='text-3xl font-bold underline'>Hello world</h1>
-      <Button>SignIn</Button>
-    </>
+    <Routes>
+      <Route path="/" element={<Auth />} />
+      <Route path="/home" element={<HomeLayout />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
