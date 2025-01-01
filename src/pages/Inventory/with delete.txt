@@ -1,0 +1,179 @@
+import { Pencil, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import DeleteConfirmation from "@/components/DeleteConfirmation";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+// import { deleteItem } from "@/lib/actions";
+
+// Mock data for inventory items
+const inventoryItems = [
+  {
+    id: "1",
+    productName: "Widget A",
+    productCode: "WA001",
+    quantity: 50,
+    unitCost: 9.99,
+    status: "in-stock",
+    lastRecvDt: "2023-05-15",
+    ageing: 30,
+  },
+  {
+    id: "2",
+    productName: "Gadget B",
+    productCode: "GB002",
+    quantity: 30,
+    unitCost: 19.99,
+    status: "low-stock",
+    lastRecvDt: "2023-04-20",
+    ageing: 55,
+  },
+  {
+    id: "3",
+    productName: "Tool C",
+    productCode: "TC003",
+    quantity: 0,
+    unitCost: 29.99,
+    status: "out-of-stock",
+    lastRecvDt: "2023-03-10",
+    ageing: 95,
+  },
+  {
+    id: "4",
+    productName: "Device D",
+    productCode: "DD004",
+    quantity: 100,
+    unitCost: 49.99,
+    status: "in-stock",
+    lastRecvDt: "2023-05-25",
+    ageing: 20,
+  },
+  {
+    id: "5",
+    productName: "Product E",
+    productCode: "PE005",
+    quantity: 10,
+    unitCost: 39.99,
+    status: "low-stock",
+    lastRecvDt: "2023-05-01",
+    ageing: 44,
+  },
+];
+
+export default function InventoryListPage() {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredItems = inventoryItems.filter(
+    (item) =>
+      item.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.productCode.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleRowClick = (id) => {
+    navigate(`/inventory/${id}`);
+  };
+
+  return (
+    <Card className="w-full max-w-6xl mx-auto">
+      <CardHeader>
+        <CardTitle>Inventory List</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex justify-between items-center mb-4">
+          <Input
+            placeholder="Search inventory..."
+            className="max-w-sm"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <div className="space-x-2">
+            <Button>
+              <RefreshCw className="mr-2 h-4 w-4" /> Refresh
+            </Button>
+            <Button as={Link} to="/inventory/add">
+              <Plus className="mr-2 h-4 w-4" /> Add Item
+            </Button>
+          </div>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Product Name</TableHead>
+              <TableHead>Product Code</TableHead>
+              <TableHead>Quantity</TableHead>
+              <TableHead>Unit Cost</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Last Received</TableHead>
+              <TableHead>Ageing (days)</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredItems.map((item) => (
+              <TableRow
+                key={item.id}
+                onClick={() => handleRowClick(item.id)}
+                className="cursor-pointer hover:bg-muted/50"
+              >
+                <TableCell>{item.productName}</TableCell>
+                <TableCell>{item.productCode}</TableCell>
+                <TableCell>{item.quantity}</TableCell>
+                <TableCell>${item.unitCost.toFixed(2)}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      item.status === "in-stock"
+                        ? "default"
+                        : item.status === "low-stock"
+                        ? "warning"
+                        : "destructive"
+                    }
+                  >
+                    {item.status.replace("-", " ")}
+                  </Badge>
+                </TableCell>
+                <TableCell>{item.lastRecvDt}</TableCell>
+                <TableCell>{item.ageing}</TableCell>
+                <TableCell>
+                  <div
+                    className="flex space-x-2"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Link to={`/inventory/${item.id}/edit`}>
+                      <Button variant="outline" size="sm">
+                        <Pencil className="h-4 w-4" />
+                        <span className="sr-only">Edit</span>
+                      </Button>
+                    </Link>
+                    <DeleteConfirmation
+                      itemId={item.id}
+                      itemName={item.productName}
+                      // deleteAction={deleteItem}
+                    >
+                      <Button variant="outline" size="sm">
+                        <Trash2 className="h-4 w-4" />
+                        <span className="sr-only">Delete</span>
+                      </Button>
+                    </DeleteConfirmation>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+}

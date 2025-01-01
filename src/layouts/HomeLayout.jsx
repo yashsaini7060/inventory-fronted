@@ -1,3 +1,6 @@
+import PropTypes from "prop-types";
+import React from "react";
+
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -13,7 +16,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-function HomeLayout() {
+
+export default function HomeLayout({ children, breadcrumbs = [] }) {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -24,34 +28,42 @@ function HomeLayout() {
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Test</BreadcrumbPage>
-                </BreadcrumbItem>
+                {breadcrumbs.map((crumb, index) => (
+                  <React.Fragment key={crumb.label}>
+                    <BreadcrumbItem
+                      className={index === 0 ? "hidden md:block" : ""}
+                    >
+                      {index === breadcrumbs.length - 1 ? (
+                        <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink href={crumb.href}>
+                          {crumb.label}
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                    {index < breadcrumbs.length - 1 && (
+                      <BreadcrumbSeparator
+                        className={index === 0 ? "hidden md:block" : ""}
+                      />
+                    )}
+                  </React.Fragment>
+                ))}
               </BreadcrumbList>
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-          </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
-        </div>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
 }
 
-export default HomeLayout;
+HomeLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+  breadcrumbs: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      href: PropTypes.string,
+    })
+  ),
+};

@@ -1,6 +1,5 @@
-"use client";
-
 import { ChevronRight } from "lucide-react";
+import { Home } from "lucide-react";
 
 import {
   Collapsible,
@@ -21,6 +20,16 @@ import {
 export function NavMain({ items }) {
   return (
     <SidebarGroup>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild isActive={true}>
+            <a href="/dashboard">
+              <Home />
+              <span>Dashboard</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (

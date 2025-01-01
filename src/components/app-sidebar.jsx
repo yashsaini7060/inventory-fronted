@@ -21,6 +21,9 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 
@@ -31,106 +34,98 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Inventory",
+      url: "/inventory",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Inventory List",
+          url: "/inventory",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Add Inventory",
+          url: "/inventory/additem",
+        },
+
+        {
+          title: "Update Inventory Item",
+          url: "/inventory/updateitem",
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "Delete Inventory Item",
+          url: "/inventory/deleteitem",
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
+      title: "Orders",
+      url: "/orders",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Orders List",
+          url: "/orders",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Add Order",
+          url: "/orders/add",
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "Update Order",
+          url: "/orders/update",
+        },
+        {
+          title: "Delete Order",
+          url: "/orders/delete",
         },
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
+      title: "Dispatches",
+      url: "/dispatches",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Dispatches List",
+          url: "/dispatches",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Add Dispatch",
+          url: "/dispatches/add",
         },
         {
-          title: "Tutorials",
-          url: "#",
+          title: "Update Dispatch",
+          url: "/dispatches/update",
         },
         {
-          title: "Changelog",
-          url: "#",
+          title: "Delete Dispatch",
+          url: "/dispatches/delete",
         },
       ],
     },
     {
-      title: "Settings",
-      url: "#",
+      title: "Reports",
+      url: "/reports/general",
       icon: Settings2,
       items: [
         {
           title: "General",
-          url: "#",
+          url: "/reports/general",
         },
         {
           title: "Team",
-          url: "#",
+          url: "/reports/team",
         },
         {
           title: "Billing",
-          url: "#",
+          url: "/reports/billing",
         },
         {
           title: "Limits",
-          url: "#",
+          url: "/reports/limits",
         },
       ],
     },
@@ -158,11 +153,25 @@ export function AppSidebar({ ...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <a href="#">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <GalleryVerticalEnd className="size-4" />
+                </div>
+                <div className="flex flex-col gap-0.5 leading-none">
+                  <span className="font-semibold">Inventory</span>
+                  <span className="">v1.0.0</span>
+                </div>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
